@@ -7,10 +7,9 @@ import Filters from './pages/Filters';
 import SearchBar from './components/SearchBar';
 import Profile from './pages/Profile';
 import MyEvents from './pages/MyEvents';
-import MapApp from './components/Map';
+import MapApp from './components/Map'; // Assurez-vous que le chemin est correct
 import Settings from './pages/Settings';
 import Modal from './components/Modal';
-
 
 const AppContainer = styled.div`
   display: flex;
@@ -26,8 +25,9 @@ const Buttons = styled.div`
   flex-direction: column;
   padding-top: 150px;
   position: fixed;
-  left: 0;
-  z-index: 1;
+  left: 10px;
+  top: 60px;
+  z-index: 2; /* Assurez-vous que le z-index est supérieur à celui de la carte */
 `;
 
 const TopBar = styled.div`
@@ -39,7 +39,8 @@ const TopBar = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
+  background-color: white; /* Ajoutez un fond pour s'assurer que le contenu en dessous n'est pas visible */
 `;
 
 const Content = styled.div`
@@ -131,7 +132,6 @@ const App: React.FC = () => {
         <MapApp />
         <AppContainer>
           <TopBar>
-
             <SearchBar />
           </TopBar>
           <Buttons>
