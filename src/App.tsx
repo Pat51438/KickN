@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AddEvent from "./pages/AddEvent";
-import EventDetail from './components/EventDetail';
+import EventDetail from './context/EventDetail';
 import Messaging from './pages/Messaging';
 import Filters from './pages/Filters';
 import SearchBar from './components/SearchBar';
 import Profile from './pages/Profile';
 import MyEvents from './pages/MyEvents';
-import MapApp from './components/Map'; // Assurez-vous que le chemin est correct
+import MapApp from './components/Map';
 import Settings from './pages/Settings';
 import Modal from './components/Modal';
 
@@ -27,7 +27,7 @@ const Buttons = styled.div`
   position: fixed;
   left: 10px;
   top: 60px;
-  z-index: 2; /* Assurez-vous que le z-index est supérieur à celui de la carte */
+  z-index: 2; 
 `;
 
 const TopBar = styled.div`
