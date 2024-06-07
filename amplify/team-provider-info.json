@@ -20,7 +20,7 @@
       "function": {
         "kickn9f6d39cf": {
           "deploymentBucketName": "amplify-kickn-dev-38a79-deployment",
-          "s3Key": "amplify-builds/kickn9f6d39cf-754a6a442f634c774c67-build.zip"
+          "s3Key": "amplify-builds/kickn9f6d39cf-7834676736787948786d-build.zip"
         }
       },
       "auth": {

@@ -17,6 +17,11 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     firstName
     lastName
     DOB
+    email
+    events {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -35,6 +40,11 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     firstName
     lastName
     DOB
+    email
+    events {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -53,6 +63,11 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     firstName
     lastName
     DOB
+    email
+    events {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -68,12 +83,33 @@ export const createEvent = /* GraphQL */ `mutation CreateEvent(
 ) {
   createEvent(input: $input, condition: $condition) {
     id
+    user {
+      id
+      firstName
+      lastName
+      DOB
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
     activity
-    location
+    locationID
+    location {
+      id
+      latitude
+      longitude
+      createdAt
+      updatedAt
+      locationEventId
+      __typename
+    }
     date
     time
     createdAt
     updatedAt
+    userEventsId
+    eventLocationId
     __typename
   }
 }
@@ -87,12 +123,33 @@ export const updateEvent = /* GraphQL */ `mutation UpdateEvent(
 ) {
   updateEvent(input: $input, condition: $condition) {
     id
+    user {
+      id
+      firstName
+      lastName
+      DOB
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
     activity
-    location
+    locationID
+    location {
+      id
+      latitude
+      longitude
+      createdAt
+      updatedAt
+      locationEventId
+      __typename
+    }
     date
     time
     createdAt
     updatedAt
+    userEventsId
+    eventLocationId
     __typename
   }
 }
@@ -106,16 +163,127 @@ export const deleteEvent = /* GraphQL */ `mutation DeleteEvent(
 ) {
   deleteEvent(input: $input, condition: $condition) {
     id
+    user {
+      id
+      firstName
+      lastName
+      DOB
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
     activity
-    location
+    locationID
+    location {
+      id
+      latitude
+      longitude
+      createdAt
+      updatedAt
+      locationEventId
+      __typename
+    }
     date
     time
     createdAt
     updatedAt
+    userEventsId
+    eventLocationId
     __typename
   }
 }
 ` as GeneratedMutation<
   APITypes.DeleteEventMutationVariables,
   APITypes.DeleteEventMutation
+>;
+export const createLocation = /* GraphQL */ `mutation CreateLocation(
+  $input: CreateLocationInput!
+  $condition: ModelLocationConditionInput
+) {
+  createLocation(input: $input, condition: $condition) {
+    id
+    event {
+      id
+      activity
+      locationID
+      date
+      time
+      createdAt
+      updatedAt
+      userEventsId
+      eventLocationId
+      __typename
+    }
+    latitude
+    longitude
+    createdAt
+    updatedAt
+    locationEventId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateLocationMutationVariables,
+  APITypes.CreateLocationMutation
+>;
+export const updateLocation = /* GraphQL */ `mutation UpdateLocation(
+  $input: UpdateLocationInput!
+  $condition: ModelLocationConditionInput
+) {
+  updateLocation(input: $input, condition: $condition) {
+    id
+    event {
+      id
+      activity
+      locationID
+      date
+      time
+      createdAt
+      updatedAt
+      userEventsId
+      eventLocationId
+      __typename
+    }
+    latitude
+    longitude
+    createdAt
+    updatedAt
+    locationEventId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateLocationMutationVariables,
+  APITypes.UpdateLocationMutation
+>;
+export const deleteLocation = /* GraphQL */ `mutation DeleteLocation(
+  $input: DeleteLocationInput!
+  $condition: ModelLocationConditionInput
+) {
+  deleteLocation(input: $input, condition: $condition) {
+    id
+    event {
+      id
+      activity
+      locationID
+      date
+      time
+      createdAt
+      updatedAt
+      userEventsId
+      eventLocationId
+      __typename
+    }
+    latitude
+    longitude
+    createdAt
+    updatedAt
+    locationEventId
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteLocationMutationVariables,
+  APITypes.DeleteLocationMutation
 >;

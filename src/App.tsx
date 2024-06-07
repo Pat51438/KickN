@@ -10,6 +10,10 @@ import MyEvents from './pages/MyEvents';
 import MapApp from './components/Map';
 import Settings from './pages/Settings';
 import Modal from './components/Modal';
+import { Amplify } from 'aws-amplify';
+import awsExports from './amplifyconfiguration.json';
+Amplify.configure(awsExports);
+
 
 const AppContainer = styled.div`
   display: flex;

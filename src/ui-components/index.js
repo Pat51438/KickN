@@ -6,6 +6,6 @@
 
 export { default as EventCreateForm } from "./EventCreateForm";
 export { default as EventUpdateForm } from "./EventUpdateForm";
-export { default as UserCreateForm } from "./UserCreateForm";
-export { default as UserUpdateForm } from "./UserUpdateForm";
+export { default as LocationCreateForm } from "./LocationCreateForm";
+export { default as LocationUpdateForm } from "./LocationUpdateForm";
 export { default as studioTheme } from "./studioTheme";

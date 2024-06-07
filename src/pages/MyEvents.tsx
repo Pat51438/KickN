@@ -1,8 +1,8 @@
 // src/pages/MyEvents.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
-import { GET_USER_EVENTS } from '../queries';
+import { DataStore } from "@aws-amplify/datastore";
+import { Event, User } from "../models";
 
 const MyEventsContainer = styled.div`
     padding: 20px;
@@ -22,27 +22,36 @@ const EventCard = styled.div`
 `;
 
 const MyEvents: React.FC = () => {
-    // Remplacez 'userId' par l'ID de l'utilisateur actuel
     const userId = '1';
+    const [events, setEvents] = useState<Event[]>([]);
 
-    const { loading, error, data } = useQuery(GET_USER_EVENTS, {
-        variables: { userId },
-    });
+    useEffect(() => {
+        const fetchUser = async (userId: string) => {
+            try {
+                const user = await DataStore.query(User, userId);
+                if (user) {
+                    const userEvents = await user.events.toArray();
+                    setEvents(userEvents);
+                }
+            } catch (error) {
+                console.error('Error fetching user events:', error);
+            }
+        };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-
-    const { events } = data.user;
+        if (userId) fetchUser(userId);
+    }, [userId]);
 
     return (
         <MyEventsContainer>
             <h2>My Events</h2>
-            {events.map((event: { id: string; activity: string; date: string; time: string; location: string }) => (
+            {events.map((event: Event) => (
                 <EventCard key={event.id}>
-                    <h3>{event.activity}</h3>
-                    <p>Date: {event.date}</p>
-                    <p>Time: {event.time}</p>
-                    <p>Location: {event.location}</p>
+                    <>
+                        <h3>{event.activity}</h3>
+                        <p>Date: {event.date}</p>
+                        <p>Time: {event.time}</p>
+                        <p>Location: {event.locationID}</p>
+                    </>
                 </EventCard>
             ))}
         </MyEventsContainer>

@@ -7,12 +7,14 @@ export type CreateUserInput = {
   firstName: string,
   lastName: string,
   DOB: string,
+  email: string,
 };
 
 export type ModelUserConditionInput = {
   firstName?: ModelStringInput | null,
   lastName?: ModelStringInput | null,
   DOB?: ModelStringInput | null,
+  email?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -66,8 +68,42 @@ export type User = {
   firstName: string,
   lastName: string,
   DOB: string,
+  email: string,
+  events?: ModelEventConnection | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelEventConnection = {
+  __typename: "ModelEventConnection",
+  items:  Array<Event | null >,
+  nextToken?: string | null,
+};
+
+export type Event = {
+  __typename: "Event",
+  id: string,
+  user?: User | null,
+  activity: string,
+  locationID: string,
+  location?: Location | null,
+  date: string,
+  time: string,
+  createdAt: string,
+  updatedAt: string,
+  userEventsId: string,
+  eventLocationId?: string | null,
+};
+
+export type Location = {
+  __typename: "Location",
+  id: string,
+  event?: Event | null,
+  latitude: string,
+  longitude: string,
+  createdAt: string,
+  updatedAt: string,
+  locationEventId?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -75,6 +111,7 @@ export type UpdateUserInput = {
   firstName?: string | null,
   lastName?: string | null,
   DOB?: string | null,
+  email?: string | null,
 };
 
 export type DeleteUserInput = {
@@ -84,14 +121,16 @@ export type DeleteUserInput = {
 export type CreateEventInput = {
   id?: string | null,
   activity: string,
-  location: string,
+  locationID: string,
   date: string,
   time: string,
+  userEventsId: string,
+  eventLocationId?: string | null,
 };
 
 export type ModelEventConditionInput = {
   activity?: ModelStringInput | null,
-  location?: ModelStringInput | null,
+  locationID?: ModelIDInput | null,
   date?: ModelStringInput | null,
   time?: ModelStringInput | null,
   and?: Array< ModelEventConditionInput | null > | null,
@@ -99,41 +138,8 @@ export type ModelEventConditionInput = {
   not?: ModelEventConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type Event = {
-  __typename: "Event",
-  id: string,
-  activity: string,
-  location: string,
-  date: string,
-  time: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateEventInput = {
-  id: string,
-  activity?: string | null,
-  location?: string | null,
-  date?: string | null,
-  time?: string | null,
-};
-
-export type DeleteEventInput = {
-  id: string,
-};
-
-export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  DOB?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
+  userEventsId?: ModelIDInput | null,
+  eventLocationId?: ModelIDInput | null,
 };
 
 export type ModelIDInput = {
@@ -152,6 +158,62 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type UpdateEventInput = {
+  id: string,
+  activity?: string | null,
+  locationID?: string | null,
+  date?: string | null,
+  time?: string | null,
+  userEventsId?: string | null,
+  eventLocationId?: string | null,
+};
+
+export type DeleteEventInput = {
+  id: string,
+};
+
+export type CreateLocationInput = {
+  id?: string | null,
+  latitude: string,
+  longitude: string,
+  locationEventId?: string | null,
+};
+
+export type ModelLocationConditionInput = {
+  latitude?: ModelStringInput | null,
+  longitude?: ModelStringInput | null,
+  and?: Array< ModelLocationConditionInput | null > | null,
+  or?: Array< ModelLocationConditionInput | null > | null,
+  not?: ModelLocationConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  locationEventId?: ModelIDInput | null,
+};
+
+export type UpdateLocationInput = {
+  id: string,
+  latitude?: string | null,
+  longitude?: string | null,
+  locationEventId?: string | null,
+};
+
+export type DeleteLocationInput = {
+  id: string,
+};
+
+export type ModelUserFilterInput = {
+  id?: ModelIDInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
+  DOB?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelUserFilterInput | null > | null,
+  or?: Array< ModelUserFilterInput | null > | null,
+  not?: ModelUserFilterInput | null,
+};
+
 export type ModelUserConnection = {
   __typename: "ModelUserConnection",
   items:  Array<User | null >,
@@ -161,7 +223,7 @@ export type ModelUserConnection = {
 export type ModelEventFilterInput = {
   id?: ModelIDInput | null,
   activity?: ModelStringInput | null,
-  location?: ModelStringInput | null,
+  locationID?: ModelIDInput | null,
   date?: ModelStringInput | null,
   time?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
@@ -169,11 +231,25 @@ export type ModelEventFilterInput = {
   and?: Array< ModelEventFilterInput | null > | null,
   or?: Array< ModelEventFilterInput | null > | null,
   not?: ModelEventFilterInput | null,
+  userEventsId?: ModelIDInput | null,
+  eventLocationId?: ModelIDInput | null,
 };
 
-export type ModelEventConnection = {
-  __typename: "ModelEventConnection",
-  items:  Array<Event | null >,
+export type ModelLocationFilterInput = {
+  id?: ModelIDInput | null,
+  latitude?: ModelStringInput | null,
+  longitude?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelLocationFilterInput | null > | null,
+  or?: Array< ModelLocationFilterInput | null > | null,
+  not?: ModelLocationFilterInput | null,
+  locationEventId?: ModelIDInput | null,
+};
+
+export type ModelLocationConnection = {
+  __typename: "ModelLocationConnection",
+  items:  Array<Location | null >,
   nextToken?: string | null,
 };
 
@@ -182,10 +258,12 @@ export type ModelSubscriptionUserFilterInput = {
   firstName?: ModelSubscriptionStringInput | null,
   lastName?: ModelSubscriptionStringInput | null,
   DOB?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserFilterInput | null > | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  userEventsId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -221,13 +299,25 @@ export type ModelSubscriptionStringInput = {
 export type ModelSubscriptionEventFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   activity?: ModelSubscriptionStringInput | null,
-  location?: ModelSubscriptionStringInput | null,
+  locationID?: ModelSubscriptionIDInput | null,
   date?: ModelSubscriptionStringInput | null,
   time?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventFilterInput | null > | null,
+  eventLocationId?: ModelSubscriptionIDInput | null,
+};
+
+export type ModelSubscriptionLocationFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  latitude?: ModelSubscriptionStringInput | null,
+  longitude?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionLocationFilterInput | null > | null,
+  or?: Array< ModelSubscriptionLocationFilterInput | null > | null,
+  locationEventId?: ModelSubscriptionIDInput | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -242,6 +332,11 @@ export type CreateUserMutation = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -259,6 +354,11 @@ export type UpdateUserMutation = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -276,6 +376,11 @@ export type DeleteUserMutation = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -290,12 +395,33 @@ export type CreateEventMutation = {
   createEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
@@ -308,12 +434,33 @@ export type UpdateEventMutation = {
   updateEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
@@ -326,28 +473,120 @@ export type DeleteEventMutation = {
   deleteEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
-export type UserQueryVariables = {
-  id: string,
+export type CreateLocationMutationVariables = {
+  input: CreateLocationInput,
+  condition?: ModelLocationConditionInput | null,
 };
 
-export type UserQuery = {
-  user?:  {
-    __typename: "User",
+export type CreateLocationMutation = {
+  createLocation?:  {
+    __typename: "Location",
     id: string,
-    firstName: string,
-    lastName: string,
-    DOB: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
     createdAt: string,
     updatedAt: string,
+    locationEventId?: string | null,
+  } | null,
+};
+
+export type UpdateLocationMutationVariables = {
+  input: UpdateLocationInput,
+  condition?: ModelLocationConditionInput | null,
+};
+
+export type UpdateLocationMutation = {
+  updateLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
+  } | null,
+};
+
+export type DeleteLocationMutationVariables = {
+  input: DeleteLocationInput,
+  condition?: ModelLocationConditionInput | null,
+};
+
+export type DeleteLocationMutation = {
+  deleteLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
   } | null,
 };
 
@@ -362,6 +601,11 @@ export type GetUserQuery = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -382,6 +626,7 @@ export type ListUsersQuery = {
       firstName: string,
       lastName: string,
       DOB: string,
+      email: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -397,12 +642,33 @@ export type GetEventQuery = {
   getEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
@@ -419,11 +685,63 @@ export type ListEventsQuery = {
       __typename: "Event",
       id: string,
       activity: string,
-      location: string,
+      locationID: string,
       date: string,
       time: string,
       createdAt: string,
       updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetLocationQueryVariables = {
+  id: string,
+};
+
+export type GetLocationQuery = {
+  getLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
+  } | null,
+};
+
+export type ListLocationsQueryVariables = {
+  filter?: ModelLocationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListLocationsQuery = {
+  listLocations?:  {
+    __typename: "ModelLocationConnection",
+    items:  Array< {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -440,6 +758,11 @@ export type OnCreateUserSubscription = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -456,6 +779,11 @@ export type OnUpdateUserSubscription = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -472,6 +800,11 @@ export type OnDeleteUserSubscription = {
     firstName: string,
     lastName: string,
     DOB: string,
+    email: string,
+    events?:  {
+      __typename: "ModelEventConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -485,12 +818,33 @@ export type OnCreateEventSubscription = {
   onCreateEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
@@ -502,12 +856,33 @@ export type OnUpdateEventSubscription = {
   onUpdateEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
   } | null,
 };
 
@@ -519,11 +894,116 @@ export type OnDeleteEventSubscription = {
   onDeleteEvent?:  {
     __typename: "Event",
     id: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      firstName: string,
+      lastName: string,
+      DOB: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     activity: string,
-    location: string,
+    locationID: string,
+    location?:  {
+      __typename: "Location",
+      id: string,
+      latitude: string,
+      longitude: string,
+      createdAt: string,
+      updatedAt: string,
+      locationEventId?: string | null,
+    } | null,
     date: string,
     time: string,
     createdAt: string,
     updatedAt: string,
+    userEventsId: string,
+    eventLocationId?: string | null,
+  } | null,
+};
+
+export type OnCreateLocationSubscriptionVariables = {
+  filter?: ModelSubscriptionLocationFilterInput | null,
+};
+
+export type OnCreateLocationSubscription = {
+  onCreateLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
+  } | null,
+};
+
+export type OnUpdateLocationSubscriptionVariables = {
+  filter?: ModelSubscriptionLocationFilterInput | null,
+};
+
+export type OnUpdateLocationSubscription = {
+  onUpdateLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
+  } | null,
+};
+
+export type OnDeleteLocationSubscriptionVariables = {
+  filter?: ModelSubscriptionLocationFilterInput | null,
+};
+
+export type OnDeleteLocationSubscription = {
+  onDeleteLocation?:  {
+    __typename: "Location",
+    id: string,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      activity: string,
+      locationID: string,
+      date: string,
+      time: string,
+      createdAt: string,
+      updatedAt: string,
+      userEventsId: string,
+      eventLocationId?: string | null,
+    } | null,
+    latitude: string,
+    longitude: string,
+    createdAt: string,
+    updatedAt: string,
+    locationEventId?: string | null,
   } | null,
 };

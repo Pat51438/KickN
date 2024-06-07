@@ -24,25 +24,25 @@ export default function EventCreateForm(props) {
   } = props;
   const initialValues = {
     activity: "",
-    location: "",
+    locationID: "",
     date: "",
     time: "",
   };
   const [activity, setActivity] = React.useState(initialValues.activity);
-  const [location, setLocation] = React.useState(initialValues.location);
+  const [locationID, setLocationID] = React.useState(initialValues.locationID);
   const [date, setDate] = React.useState(initialValues.date);
   const [time, setTime] = React.useState(initialValues.time);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setActivity(initialValues.activity);
-    setLocation(initialValues.location);
+    setLocationID(initialValues.locationID);
     setDate(initialValues.date);
     setTime(initialValues.time);
     setErrors({});
   };
   const validations = {
     activity: [{ type: "Required" }],
-    location: [{ type: "Required" }],
+    locationID: [{ type: "Required" }],
     date: [{ type: "Required" }],
     time: [{ type: "Required" }],
   };
@@ -73,7 +73,7 @@ export default function EventCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           activity,
-          location,
+          locationID,
           date,
           time,
         };
@@ -139,7 +139,7 @@ export default function EventCreateForm(props) {
           if (onChange) {
             const modelFields = {
               activity: value,
-              location,
+              locationID,
               date,
               time,
             };
@@ -157,31 +157,31 @@ export default function EventCreateForm(props) {
         {...getOverrideProps(overrides, "activity")}
       ></TextField>
       <TextField
-        label="Location"
+        label="Location id"
         isRequired={true}
         isReadOnly={false}
-        value={location}
+        value={locationID}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               activity,
-              location: value,
+              locationID: value,
               date,
               time,
             };
             const result = onChange(modelFields);
-            value = result?.location ?? value;
+            value = result?.locationID ?? value;
           }
-          if (errors.location?.hasError) {
-            runValidationTasks("location", value);
+          if (errors.locationID?.hasError) {
+            runValidationTasks("locationID", value);
           }
-          setLocation(value);
+          setLocationID(value);
         }}
-        onBlur={() => runValidationTasks("location", location)}
-        errorMessage={errors.location?.errorMessage}
-        hasError={errors.location?.hasError}
-        {...getOverrideProps(overrides, "location")}
+        onBlur={() => runValidationTasks("locationID", locationID)}
+        errorMessage={errors.locationID?.errorMessage}
+        hasError={errors.locationID?.hasError}
+        {...getOverrideProps(overrides, "locationID")}
       ></TextField>
       <TextField
         label="Date"
@@ -193,7 +193,7 @@ export default function EventCreateForm(props) {
           if (onChange) {
             const modelFields = {
               activity,
-              location,
+              locationID,
               date: value,
               time,
             };
@@ -220,7 +220,7 @@ export default function EventCreateForm(props) {
           if (onChange) {
             const modelFields = {
               activity,
-              location,
+              locationID,
               date,
               time: value,
             };

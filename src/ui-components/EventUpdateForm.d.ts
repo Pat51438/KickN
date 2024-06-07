@@ -24,13 +24,13 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type EventUpdateFormInputValues = {
     activity?: string;
-    location?: string;
+    locationID?: string;
     date?: string;
     time?: string;
 };
 export declare type EventUpdateFormValidationValues = {
     activity?: ValidationFunction<string>;
-    location?: ValidationFunction<string>;
+    locationID?: ValidationFunction<string>;
     date?: ValidationFunction<string>;
     time?: ValidationFunction<string>;
 };
@@ -38,7 +38,7 @@ export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes
 export declare type EventUpdateFormOverridesProps = {
     EventUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     activity?: PrimitiveOverrideProps<TextFieldProps>;
-    location?: PrimitiveOverrideProps<TextFieldProps>;
+    locationID?: PrimitiveOverrideProps<TextFieldProps>;
     date?: PrimitiveOverrideProps<TextFieldProps>;
     time?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;

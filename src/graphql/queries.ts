@@ -8,24 +8,17 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const user = /* GraphQL */ `query User($id: ID!) {
-  user(id: $id) {
-    id
-    firstName
-    lastName
-    DOB
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<APITypes.UserQueryVariables, APITypes.UserQuery>;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
     firstName
     lastName
     DOB
+    email
+    events {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -43,6 +36,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       firstName
       lastName
       DOB
+      email
       createdAt
       updatedAt
       __typename
@@ -55,12 +49,33 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 export const getEvent = /* GraphQL */ `query GetEvent($id: ID!) {
   getEvent(id: $id) {
     id
+    user {
+      id
+      firstName
+      lastName
+      DOB
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
     activity
-    location
+    locationID
+    location {
+      id
+      latitude
+      longitude
+      createdAt
+      updatedAt
+      locationEventId
+      __typename
+    }
     date
     time
     createdAt
     updatedAt
+    userEventsId
+    eventLocationId
     __typename
   }
 }
@@ -74,11 +89,13 @@ export const listEvents = /* GraphQL */ `query ListEvents(
     items {
       id
       activity
-      location
+      locationID
       date
       time
       createdAt
       updatedAt
+      userEventsId
+      eventLocationId
       __typename
     }
     nextToken
@@ -88,4 +105,54 @@ export const listEvents = /* GraphQL */ `query ListEvents(
 ` as GeneratedQuery<
   APITypes.ListEventsQueryVariables,
   APITypes.ListEventsQuery
+>;
+export const getLocation = /* GraphQL */ `query GetLocation($id: ID!) {
+  getLocation(id: $id) {
+    id
+    event {
+      id
+      activity
+      locationID
+      date
+      time
+      createdAt
+      updatedAt
+      userEventsId
+      eventLocationId
+      __typename
+    }
+    latitude
+    longitude
+    createdAt
+    updatedAt
+    locationEventId
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetLocationQueryVariables,
+  APITypes.GetLocationQuery
+>;
+export const listLocations = /* GraphQL */ `query ListLocations(
+  $filter: ModelLocationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      latitude
+      longitude
+      createdAt
+      updatedAt
+      locationEventId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListLocationsQueryVariables,
+  APITypes.ListLocationsQuery
 >;
