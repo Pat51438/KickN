@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aea300b4-cce8-4080-8fa8-d5b881e3a1fd" name="Changes" comment="update de fonctions">
+      <change afterPath="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/controllers/eventController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/controllers/userController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/helpers/graphQLQuery.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/routes/event.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/routes/user.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2hMxTrLXQzpFUShn6t7lKeRmOGh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.start server.executor": "Run",
+    "ts.external.directory.path": "C:\\Users\\patri\\WebstormProjects\\kick-n\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\patri\WebstormProjects\kick-n\src\context" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.start server">
+    <configuration name="start server" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/amplify/backend/function/kickn9f6d39cf/src/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="npm.start" />
+      <item itemvalue="npm.start server" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aea300b4-cce8-4080-8fa8-d5b881e3a1fd" name="Changes" comment="" />
+      <created>1717417777075</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717417777075</updated>
+      <workItem from="1717417836807" duration="82000" />
+      <workItem from="1717417950692" duration="2626000" />
+      <workItem from="1717512316640" duration="16968000" />
+    </task>
+    <task id="LOCAL-00001" summary="update de fonctions">
+      <option name="closed" value="true" />
+      <created>1717530594330</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717530594330</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update de fonctions" />
+    <option name="LAST_COMMIT_MESSAGE" value="update de fonctions" />
+  </component>
+</project>

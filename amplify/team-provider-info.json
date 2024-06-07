@@ -1,0 +1,31 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kickn-dev-38a79-authRole",
+      "UnauthRoleArn": "arn:aws:iam::339712998143:role/amplify-kickn-dev-38a79-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::339712998143:role/amplify-kickn-dev-38a79-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kickn-dev-38a79-deployment",
+      "UnauthRoleName": "amplify-kickn-dev-38a79-unauthRole",
+      "StackName": "amplify-kickn-dev-38a79",
+      "StackId": "arn:aws:cloudformation:us-east-1:339712998143:stack/amplify-kickn-dev-38a79/ddff69f0-22a0-11ef-b403-0affc3c6df5d",
+      "AmplifyAppId": "d3nbgnpxqjyc2w",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-kickn-dev-38a79-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "api": {
+        "kickn": {},
+        "kicknrest": {}
+      },
+      "function": {
+        "kickn9f6d39cf": {
+          "deploymentBucketName": "amplify-kickn-dev-38a79-deployment",
+          "s3Key": "amplify-builds/kickn9f6d39cf-754a6a442f634c774c67-build.zip"
+        }
+      },
+      "auth": {
+        "kickn": {}
+      }
+    }
+  }
+}

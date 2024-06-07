@@ -33,16 +33,16 @@ const Button = styled.button`
 
 const sportsCategories = {
     team: ['Hockey', 'Soccer', 'Football', 'Basketball', 'Baseball'],
-    combat: ['Boxing', 'Karate', 'Judo', 'Taekwondo', 'Wrestling'],
+    combat: ['Boxing', 'Karate', 'Judo', 'Taekwondo', 'Wrestling', 'MMA'],
     racket: ['Tennis', 'Ping Pong', 'Badminton', 'Squash'],
-    social: ['Bowling', 'Pool', 'Darts', 'Bocce', 'Cornhole'],
-    shooting: ['Paintball', 'Laser Tag', 'Airsoft', 'Archery'],
+    social: ['Bowling', 'Pool', 'Darts'],
+    shooting: ['Paintball', 'Laser Tag', 'Airsoft'],
 };
 
 const Filters = () => {
     const [selectedCategory, setSelectedCategory] = useState<keyof typeof sportsCategories | ''>('');
-    const [distanceRange, setDistanceRange] = useState<[number, number]>([10, 100]);
-    const [timeframeRange, setTimeframeRange] = useState<[number, number]>([1, 30]);
+    const [distanceRange, setDistanceRange] = useState<[number, number]>([1, 10]);
+    const [timeframeRange, setTimeframeRange] = useState<[number, number]>([1, 24]);
     const [filteredOptions, setFilteredOptions] = useState<string | null>(null);
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -60,8 +60,8 @@ const Filters = () => {
     const handleShowOptions = () => {
         setFilteredOptions(`You have selected:
     - Sport Category: ${selectedCategory}
-    - Distance: between ${distanceRange[0]} km and ${distanceRange[1]} km
-    - Timeframe: between ${timeframeRange[0]} and ${timeframeRange[1]} days`);
+    - Distance: between ${distanceRange[0]} km and ${distanceRange[1]} kms
+    - Timeframe: between ${timeframeRange[0]} and ${timeframeRange[1]} hours`);
     };
 
     return (
@@ -92,8 +92,8 @@ const Filters = () => {
     <FilterSection>
         <FilterLabel>How far away?</FilterLabel>
         <RangeSlider
-        min={1}
-    max={1000}
+        min={0}
+    max={100}
     step={1}
     values={distanceRange}
     onChange={handleDistanceChange}
@@ -106,14 +106,14 @@ const Filters = () => {
     <FilterSection>
     <FilterLabel>What timeframe do you want to play?</FilterLabel>
         <RangeSlider
-        min={1}
-    max={30}
+        min={0}
+    max={100}
     step={1}
     values={timeframeRange}
     onChange={handleTimeframeChange}
     />
     <div>
-    You want to play in the next {timeframeRange[0]} to {timeframeRange[1]} days
+    You want to play in the next {timeframeRange[0]} to {timeframeRange[1]} hours
     </div>
     </FilterSection>
 

@@ -30,6 +30,7 @@ exports.user_detail = asyncHandler(async (req, res, next) => {
              firstName
              id
              lastName
+             email
             }
         }`,
         "getUser",
@@ -42,25 +43,24 @@ exports.user_detail = asyncHandler(async (req, res, next) => {
 exports.user_create = asyncHandler(async (req, res, next) => {
     console.log(req.body)
     await executeQuery(
-        `mutation MyMutation($id: ID!, $firstName: String, $lastName: String, $DOB: String) {
+        `mutation MyMutation($id: ID!, $firstName: String, $lastName: String, $DOB: String, $email: String) {
   createUser(input: {
   id: ID!
   firstName: $firstName
   lastName: $lastName
   DOB: $DOB
+  email: $email
    }) {
    id
    firstName
    lastName
     DOB
+    email
   }
 }`,
         "createUser",
-        {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            id: req.body.id,
-            DOB: req.body.DOB
+        {id: req.body.id,
+          ...req.body
         },
         req, res);
 });
@@ -74,6 +74,7 @@ exports.user_list = asyncHandler(async (req, res, next) => {
                     lastName
                     id
                     DOB
+                    email
                   _version
                   _deleted
                 }
@@ -88,22 +89,19 @@ exports.user_update = asyncHandler(async (req, res, next) => {
     await executeQuery
 
     (
-        `mutation MyMutation($id: ID!, $firstName: String, $lastName: String, $DOB: String, $_version: Int) {
+        `mutation MyMutation($id: ID!, $firstName: String, $lastName: String, $DOB: String, $email: String, $_version: Int) {
   updateUser(input: {
      firstName
     lastName
     id
     DOB
+    email
     _version
   }
 }`,
         "updateUser",
-        {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            id: req.body.id,
-            DOB: req.body.DOB,
-            _version: req.body._version
+        {id: req.body.id,
+            ...req.body
         },
         req, res);
 })
@@ -116,6 +114,7 @@ exports.user_delete = asyncHandler(async (req, res, next) => {
                firstName
                id
                lastName
+               email
             }
         }`,
         "deleteUser",

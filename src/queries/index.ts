@@ -10,9 +10,15 @@ export const GET_USER_EVENTS = gql`
             Event {
                 id
                 activity
-                location
                 date
                 time
+                location{
+                    id
+                    name
+                    latitude
+                    longitude
+                }
+                
             }
         }
     }
