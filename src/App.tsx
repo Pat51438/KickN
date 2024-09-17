@@ -12,6 +12,13 @@ import Settings from './pages/Settings';
 import Modal from './components/Modal';
 import { DataStore } from '@aws-amplify/datastore';
 import { Event } from './models';
+import axios from 'axios';
+
+interface SearchResult {
+  name: string;
+  longitude: number;
+  latitude: number;
+}
 
 const AppContainer = styled.div`
   display: flex;
@@ -19,29 +26,30 @@ const AppContainer = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  overflow: hidden; 
 `;
 
 const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 110px;
   position: absolute;
+  top: 25%; 
   left: 10px;
-  z-index: 1;
+  z-index: 10; 
 `;
 
 const TopBar = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center; 
+  align-items: center; 
   width: 100%;
   padding: 10px;
-  position: fixed;
+  position: absolute; /
   top: 0;
   left: 0;
-  z-index: 10;
-  background-color: rgba(255, 255, 255, 0.8); /* Ensure the top bar is visible */
+  z-index: 10; 
+
 `;
 
 const Content = styled.div`
@@ -50,8 +58,7 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-top: 60px;
-  height: calc(100% - 60px);
+  height: 100%; /* Ensure the content takes full height */
 `;
 
 const Button = styled.button`
@@ -66,13 +73,20 @@ const Button = styled.button`
 
 const App: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(''); // Add this line
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null); // Change this line
   const [areFiltersVisible, setAreFiltersVisible] = useState(false);
   const [isMyEventsVisible, setIsMyEventsVisible] = useState(false);
   const [isMessagingVisible, setIsMessagingVisible] = useState(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [viewport, setViewport] = useState({
+    longitude: -100.0,
+    latitude: 40.0,
+    zoom: 3.5
+  });
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -99,11 +113,12 @@ const App: React.FC = () => {
   };
 
   const openEventDetail = (eventId: string) => {
-    setSelectedEventId(eventId);
+    const event = events.find(event => event.id === eventId) || null;
+    setSelectedEvent(event);
   };
 
   const closeEventDetail = () => {
-    setSelectedEventId(null);
+    setSelectedEvent(null);
   };
 
   const openFilters = () => {
@@ -138,11 +153,57 @@ const App: React.FC = () => {
     setIsSettingsVisible(false);
   };
 
+  const handleSearchSubmit = async (query: string) => {
+    console.log('Search submitted:', query);
+    try {
+      const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+        params: {
+          q: query,
+          format: 'json',
+          limit: 1,
+        },
+      });
+
+      if (response.data && response.data.length > 0) {
+        const result = response.data[0];
+        setSearchResult({
+          name: result.display_name,
+          longitude: parseFloat(result.lon),
+          latitude: parseFloat(result.lat),
+        });
+        setViewport({
+          longitude: parseFloat(result.lon),
+          latitude: parseFloat(result.lat),
+          zoom: 10,
+        });
+      } else {
+        setSearchResult(null);
+        console.log('No results found');
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+      setSearchResult(null);
+    }
+  };
+
   return (
       <AppContainer>
         <TopBar>
-          <SearchBar />
+          <SearchBar 
+            searchQuery={searchQuery} 
+            setSearchQuery={setSearchQuery} 
+            handleSearchSubmit={(e) => { e.preventDefault(); handleSearchSubmit(searchQuery); }} // Update this line
+            onSearch={handleSearchSubmit} // Assurez-vous que cette ligne est présente
+          />
         </TopBar>
+        <MapApp 
+          events={events} 
+          selectedEvent={selectedEvent} 
+          setSelectedEvent={setSelectedEvent} 
+          viewport={viewport} 
+          setViewport={setViewport} 
+          searchResult={searchResult}
+        />
         <ButtonsContainer>
           <Button onClick={openProfile}>Profile</Button>
           <Button onClick={openAddEventForm}>Add Event</Button>
@@ -152,9 +213,18 @@ const App: React.FC = () => {
           <Button onClick={openSettings}>Settings</Button>
         </ButtonsContainer>
         <Content>
-          <MapApp events={events} />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+            <MapApp 
+              events={events} 
+              selectedEvent={selectedEvent} 
+              setSelectedEvent={setSelectedEvent} 
+              viewport={viewport} 
+              setViewport={setViewport}
+              searchResult={searchResult} // Add this line
+            />
+          </div>
           {isAddingEvent && <AddEvent onClose={closeAddEventForm} />}
-          {selectedEventId && <EventDetail eventId={selectedEventId} onClose={closeEventDetail} />}
+          {selectedEvent && <EventDetail eventId={selectedEvent.id} onClose={closeEventDetail} />}
         </Content>
         <Modal show={isProfileVisible} onClose={closeProfile}>
           <Profile />

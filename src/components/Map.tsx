@@ -5,21 +5,24 @@ import React, { useEffect, useState } from 'react';
 import Map, { Marker, Popup } from 'react-map-gl';
 import { DataStore } from '@aws-amplify/datastore';
 import { Event, Location } from '../models';
-import * as events from "events";
+import { SearchResult } from '../types/interfaces/SearchResult'; // Add this import
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicGF0cmlja2M1MTQiLCJhIjoiY2x3aTlibWh3MDRxZTJscGszYnJoODI2ZSJ9.7abA_VeG2IHewqyfW7iAqw';
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '';
 
 interface MapAppProps {
     events: Event[];
+    selectedEvent: Event | null;
+    setSelectedEvent: (event: Event | null) => void;
+    viewport: {
+        longitude: number;
+        latitude: number;
+        zoom: number;
+    };
+    setViewport: (viewport: { longitude: number; latitude: number; zoom: number }) => void;
+    searchResult: SearchResult | null;
 }
 
-const MapApp: React.FC<MapAppProps> = ({ events }) => {
-    const [viewport, setViewport] = useState({
-        longitude: -100,
-        latitude: 40,
-        zoom: 3.5,
-    });
-    const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+const MapApp: React.FC<MapAppProps> = ({ events, selectedEvent, setSelectedEvent, viewport, setViewport, searchResult }) => {
     const [eventLocations, setEventLocations] = useState<{ [key: string]: Location }>({});
 
     useEffect(() => {
@@ -43,7 +46,7 @@ const MapApp: React.FC<MapAppProps> = ({ events }) => {
 
     return (
         <Map
-            mapLib={import('mapbox-gl')}
+     
             initialViewState={viewport}
             style={{ width: '100vw', height: '100vh' }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -71,6 +74,22 @@ const MapApp: React.FC<MapAppProps> = ({ events }) => {
                     </Marker>
                 );
             })}
+            {searchResult && (
+                <Marker
+                    longitude={searchResult.longitude}
+                    latitude={searchResult.latitude}
+                >
+                    <button
+                        className="marker-btn search-result"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            // Vous pouvez ajouter une action ici si nécessaire
+                        }}
+                    >
+                        <img src="/search-pin.png" alt="Search Result" />
+                    </button>
+                </Marker>
+            )}
             {selectedEvent && eventLocations[selectedEvent.id] && (
                 <Popup
                     longitude={parseFloat(String(eventLocations[selectedEvent.id].longitude))}
