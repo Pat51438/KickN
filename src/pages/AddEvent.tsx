@@ -1,5 +1,8 @@
+// src/pages/AddEvent.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { DataStore } from '@aws-amplify/datastore';
+import { Event, Location } from '../models';
 
 const AddEventContainer = styled.div`
     display: flex;
@@ -76,6 +79,14 @@ interface EventData {
     price?: number;
 }
 
+const sportsCategories = {
+    team: ['Hockey', 'Soccer', 'Football', 'Basketball', 'Baseball'],
+    combat: ['Boxing', 'Karate', 'Judo', 'Taekwondo', 'Wrestling', 'MMA'],
+    racket: ['Tennis', 'Ping Pong', 'Badminton', 'Squash'],
+    social: ['Bowling', 'Pool', 'Darts'],
+    shooting: ['Paintball', 'Laser Tag', 'Airsoft'],
+};
+
 const AddEvent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [eventData, setEventData] = useState<EventData>({
         title: '',
@@ -89,6 +100,7 @@ const AddEvent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     });
 
     const [error, setError] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<keyof typeof sportsCategories | ''>('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -100,7 +112,13 @@ const AddEvent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         setEventData({ ...eventData, [name]: checked });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedCategory(e.target.value as keyof typeof sportsCategories);
+        setEventData({ ...eventData, sport: '' });
+    };
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!eventData.title || !eventData.date || !eventData.time || !eventData.location || !eventData.sport) {
             setError('Please fill out all required fields.');
@@ -112,104 +130,132 @@ const AddEvent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         }
         setError(null);
 
-        // Normally, you would send the data to the backend here
+        try {
+            // Save the location first (vous devrez ajuster ceci selon vos besoins)
+            const location = await DataStore.save(
+                new Location({
+                    // Vous devrez déterminer comment obtenir les coordonnées à partir de l'adresse
+                    latitude: 0, // Placeholder
+                    longitude: 0, // Placeholder
+                })
+            );
 
-        // Reset form after successful submission
-        setEventData({
-            title: '',
-            description: '',
-            date: '',
-            time: '',
-            location: '',
-            sport: '',
-            isPaid: false,
-            price: undefined,
-        });
+            // Then save the event with the location ID
+            await DataStore.save(
+                new Event({
+                    activity: eventData.sport,
+                    locationID: location.id,
+                    date: eventData.date,
+                    time: eventData.time,
+                    userEventsId: 'user-id-placeholder', // Remplacez par l'ID utilisateur approprié
+                })
+            );
 
-        alert('Event added successfully!');
+            setEventData({
+                title: '',
+                description: '',
+                date: '',
+                time: '',
+                location: '',
+                sport: '',
+                isPaid: false,
+                price: undefined,
+            });
+
+            alert('Event added successfully!');
+            onClose();
+        } catch (error) {
+            if (error instanceof Error) {
+                setError('Error adding event: ' + error.message);
+            } else {
+                setError('An unknown error occurred');
+            }
+        }
     };
 
     return (
         <AddEventContainer>
             <CloseButton onClick={onClose}>×</CloseButton>
-    <h2>Add New Event</h2>
-    {error && <p style={{ color: 'red' }}>{error}</p>}
-    <form onSubmit={handleSubmit}>
-    <Input
-        type="text"
-        name="title"
-        placeholder="Event Title"
-        value={eventData.title}
-        onChange={handleChange}
-        required
-        />
-        <TextArea
-            name="description"
-        placeholder="Event Description"
-        value={eventData.description}
-        onChange={handleChange}
-        />
-        <Input
-        type="date"
-        name="date"
-        value={eventData.date}
-        onChange={handleChange}
-        required
-        />
-        <Input
-            type="time"
-        name="time"
-        value={eventData.time}
-        onChange={handleChange}
-        required
-        />
-        <Input
-            type="text"
-        name="location"
-        placeholder="Event Location"
-        value={eventData.location}
-        onChange={handleChange}
-        required
-        />
-        <Select name="sport" value={eventData.sport} onChange={handleChange} required>
-    <option value="">Select Sport</option>
-    <option value="hockey">Hockey</option>
-        <option value="soccer">Soccer</option>
-        <option value="basketball">Basketball</option>
-        <option value="boxing">Boxing</option>
-        <option value="karate">Karate</option>
-        <option value="tennis">Tennis</option>
-        <option value="ping pong">Ping Pong</option>
-    <option value="bowling">Bowling</option>
-        <option value="pool">Pool</option>
-        <option value="darts">Darts</option>
-        <option value="paintball">Paintball</option>
-        <option value="laser tag">Laser Tag</option>
-    <option value="airsoft">Airsoft</option>
-        <option value="other">Other</option>
-    </Select>
-    <CheckboxLabel>
-    <Checkbox
-        type="checkbox"
-        name="isPaid"
-        checked={eventData.isPaid}
-        onChange={handleCheckboxChange}
-        />
-        Is this a paid event?
-        </CheckboxLabel>
-        {eventData.isPaid && (
+            <h2>Add New Event</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <form onSubmit={handleSubmit}>
                 <Input
-                    type="number"
-            name="price"
-            placeholder="Event Price"
-            value={eventData.price}
-            onChange={handleChange}
-        />
-    )}
-        <Button type="submit">Add Event</Button>
-    </form>
-    </AddEventContainer>
-    );
-    };
+                    type="text"
+                    name="title"
+                    placeholder="Event Title"
+                    value={eventData.title}
+                    onChange={handleChange}
+                    required
+                />
+                <TextArea
+                    name="description"
+                    placeholder="Event Description"
+                    value={eventData.description}
+                    onChange={handleChange}
+                />
+                <Input
+                    type="date"
+                    name="date"
+                    value={eventData.date}
+                    onChange={handleChange}
+                    required
+                />
+                <Input
+                    type="time"
+                    name="time"
+                    value={eventData.time}
+                    onChange={handleChange}
+                    required
+                />
+                <Input
+                    type="text"
+                    name="location"
+                    placeholder="Event Location"
+                    value={eventData.location}
+                    onChange={handleChange}
+                    required
+                />
+                {/* Les champs de latitude et longitude ont été supprimés */}
+                <Select value={selectedCategory} onChange={handleCategoryChange} required>
+                    <option value="">Select Sport Category</option>
+                    <option value="team">Team Sports</option>
+                    <option value="combat">Combat Sports</option>
+                    <option value="racket">Racket Sports</option>
+                    <option value="social">Social Sports</option>
+                    <option value="shooting">Shooting Sports</option>
+                </Select>
 
-    export default AddEvent;
+                {selectedCategory && (
+                    <Select name="sport" value={eventData.sport} onChange={handleChange} required>
+                        <option value="">Select Sport</option>
+                        {sportsCategories[selectedCategory].map((sport) => (
+                            <option key={sport} value={sport}>{sport}</option>
+                        ))}
+                    </Select>
+                )}
+
+                <CheckboxLabel>
+                    <Checkbox
+                        type="checkbox"
+                        name="isPaid"
+                        checked={eventData.isPaid}
+                        onChange={handleCheckboxChange}
+                    />
+                    Is this a paid event?
+                </CheckboxLabel>
+                {eventData.isPaid && (
+                    <Input
+                        type="number"
+                        name="price"
+                        placeholder="Event Price"
+                        value={eventData.price}
+                        onChange={handleChange}
+                    />
+                )}
+                <Button type="submit">Add Event</Button>
+            </form>
+        </AddEventContainer>
+    );
+};
+
+export default AddEvent;

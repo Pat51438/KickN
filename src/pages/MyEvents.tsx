@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DataStore } from "@aws-amplify/datastore";
-import { Event, User } from "../models";
+import { Event } from "../models";
 
 const MyEventsContainer = styled.div`
     padding: 20px;
@@ -26,32 +26,31 @@ const MyEvents: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
 
     useEffect(() => {
-        const fetchUser = async (userId: string) => {
+        const fetchEvents = async () => {
             try {
-                const user = await DataStore.query(User, userId);
-                if (user) {
-                    const userEvents = await user.events.toArray();
-                    setEvents(userEvents);
-                }
+                const userEvents = await DataStore.query(Event);
+                setEvents(userEvents);
             } catch (error) {
-                console.error('Error fetching user events:', error);
+                console.error('Error fetching events:', error);
             }
         };
 
-        if (userId) fetchUser(userId);
-    }, [userId]);
+        fetchEvents();
+
+        const subscription = DataStore.observe(Event).subscribe(() => fetchEvents());
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     return (
         <MyEventsContainer>
             <h2>My Events</h2>
             {events.map((event: Event) => (
                 <EventCard key={event.id}>
-                    <>
-                        <h3>{event.activity}</h3>
-                        <p>Date: {event.date}</p>
-                        <p>Time: {event.time}</p>
-                        <p>Location: {event.locationID}</p>
-                    </>
+                    <h3>{event.activity}</h3>
+                    <p>Date: {event.date}</p>
+                    <p>Time: {event.time}</p>
+                    <p>Location: {event.locationID}</p>
                 </EventCard>
             ))}
         </MyEventsContainer>

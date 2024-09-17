@@ -24,6 +24,6 @@ type Event @model  {
 type Location @model {
   id: ID!
   event: Event @belongsTo
-  latitude: String!
-  longitude: String!
+  latitude: Float!
+  longitude: Float!
 }

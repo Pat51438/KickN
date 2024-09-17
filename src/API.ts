@@ -99,8 +99,8 @@ export type Location = {
   __typename: "Location",
   id: string,
   event?: Event | null,
-  latitude: string,
-  longitude: string,
+  latitude: number,
+  longitude: number,
   createdAt: string,
   updatedAt: string,
   locationEventId?: string | null,
@@ -174,14 +174,14 @@ export type DeleteEventInput = {
 
 export type CreateLocationInput = {
   id?: string | null,
-  latitude: string,
-  longitude: string,
+  latitude: number,
+  longitude: number,
   locationEventId?: string | null,
 };
 
 export type ModelLocationConditionInput = {
-  latitude?: ModelStringInput | null,
-  longitude?: ModelStringInput | null,
+  latitude?: ModelFloatInput | null,
+  longitude?: ModelFloatInput | null,
   and?: Array< ModelLocationConditionInput | null > | null,
   or?: Array< ModelLocationConditionInput | null > | null,
   not?: ModelLocationConditionInput | null,
@@ -190,10 +190,22 @@ export type ModelLocationConditionInput = {
   locationEventId?: ModelIDInput | null,
 };
 
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UpdateLocationInput = {
   id: string,
-  latitude?: string | null,
-  longitude?: string | null,
+  latitude?: number | null,
+  longitude?: number | null,
   locationEventId?: string | null,
 };
 
@@ -237,8 +249,8 @@ export type ModelEventFilterInput = {
 
 export type ModelLocationFilterInput = {
   id?: ModelIDInput | null,
-  latitude?: ModelStringInput | null,
-  longitude?: ModelStringInput | null,
+  latitude?: ModelFloatInput | null,
+  longitude?: ModelFloatInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelLocationFilterInput | null > | null,
@@ -311,13 +323,25 @@ export type ModelSubscriptionEventFilterInput = {
 
 export type ModelSubscriptionLocationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  latitude?: ModelSubscriptionStringInput | null,
-  longitude?: ModelSubscriptionStringInput | null,
+  latitude?: ModelSubscriptionFloatInput | null,
+  longitude?: ModelSubscriptionFloatInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionLocationFilterInput | null > | null,
   or?: Array< ModelSubscriptionLocationFilterInput | null > | null,
   locationEventId?: ModelSubscriptionIDInput | null,
+};
+
+export type ModelSubscriptionFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -410,8 +434,8 @@ export type CreateEventMutation = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -449,8 +473,8 @@ export type UpdateEventMutation = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -488,8 +512,8 @@ export type DeleteEventMutation = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -524,8 +548,8 @@ export type CreateLocationMutation = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -553,8 +577,8 @@ export type UpdateLocationMutation = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -582,8 +606,8 @@ export type DeleteLocationMutation = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -657,8 +681,8 @@ export type GetEventQuery = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -717,8 +741,8 @@ export type GetLocationQuery = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -737,8 +761,8 @@ export type ListLocationsQuery = {
     items:  Array< {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -833,8 +857,8 @@ export type OnCreateEventSubscription = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -871,8 +895,8 @@ export type OnUpdateEventSubscription = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -909,8 +933,8 @@ export type OnDeleteEventSubscription = {
     location?:  {
       __typename: "Location",
       id: string,
-      latitude: string,
-      longitude: string,
+      latitude: number,
+      longitude: number,
       createdAt: string,
       updatedAt: string,
       locationEventId?: string | null,
@@ -944,8 +968,8 @@ export type OnCreateLocationSubscription = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -972,8 +996,8 @@ export type OnUpdateLocationSubscription = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,
@@ -1000,8 +1024,8 @@ export type OnDeleteLocationSubscription = {
       userEventsId: string,
       eventLocationId?: string | null,
     } | null,
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     createdAt: string,
     updatedAt: string,
     locationEventId?: string | null,

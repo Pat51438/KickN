@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AddEvent from "./pages/AddEvent";
 import EventDetail from './context/EventDetail';
@@ -10,10 +10,8 @@ import MyEvents from './pages/MyEvents';
 import MapApp from './components/Map';
 import Settings from './pages/Settings';
 import Modal from './components/Modal';
-import { Amplify } from 'aws-amplify';
-import awsExports from './amplifyconfiguration.json';
-Amplify.configure(awsExports);
-
+import { DataStore } from '@aws-amplify/datastore';
+import { Event } from './models';
 
 const AppContainer = styled.div`
   display: flex;
@@ -24,14 +22,13 @@ const AppContainer = styled.div`
   height: 100%;
 `;
 
-const Buttons = styled.div`
+const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 150px;
-  position: fixed;
+  margin-top: 110px;
+  position: absolute;
   left: 10px;
-  top: 60px;
-  z-index: 2; 
+  z-index: 1;
 `;
 
 const TopBar = styled.div`
@@ -43,8 +40,8 @@ const TopBar = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
-  background-color: white; /* Ajoutez un fond pour s'assurer que le contenu en dessous n'est pas visible */
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.8); /* Ensure the top bar is visible */
 `;
 
 const Content = styled.div`
@@ -54,6 +51,7 @@ const Content = styled.div`
   align-items: center;
   width: 100%;
   padding-top: 60px;
+  height: calc(100% - 60px);
 `;
 
 const Button = styled.button`
@@ -67,6 +65,7 @@ const Button = styled.button`
 `;
 
 const App: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>([]);
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
@@ -74,6 +73,14 @@ const App: React.FC = () => {
   const [isMyEventsVisible, setIsMyEventsVisible] = useState(false);
   const [isMessagingVisible, setIsMessagingVisible] = useState(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const events = await DataStore.query(Event);
+      setEvents(events);
+    };
+    fetchEvents();
+  }, [isAddingEvent]);
 
   const openProfile = () => {
     setIsProfileVisible(true);
@@ -132,44 +139,42 @@ const App: React.FC = () => {
   };
 
   return (
-      <>
-        <MapApp />
-        <AppContainer>
-          <TopBar>
-            <SearchBar />
-          </TopBar>
-          <Buttons>
-            <Button onClick={openProfile}>Profile</Button>
-            <Button onClick={openAddEventForm}>Add Event</Button>
-            <Button onClick={openMyEvents}>My Events</Button>
-            <Button onClick={openFilters}>Event Filters</Button>
-            <Button onClick={openMessaging}>Messaging</Button>
-            <Button onClick={openSettings}>Settings</Button>
-          </Buttons>
-          <Content>
-            {isAddingEvent && <AddEvent onClose={closeAddEventForm} />}
-            {selectedEventId && <EventDetail eventId={selectedEventId} onClose={closeEventDetail} />}
-          </Content>
-          <Modal show={isProfileVisible} onClose={closeProfile}>
-            <Profile />
-          </Modal>
-          <Modal show={isAddingEvent} onClose={closeAddEventForm}>
-            <AddEvent onClose={closeAddEventForm} />
-          </Modal>
-          <Modal show={areFiltersVisible} onClose={closeFilters}>
-            <Filters />
-          </Modal>
-          <Modal show={isMyEventsVisible} onClose={closeMyEvents}>
-            <MyEvents />
-          </Modal>
-          <Modal show={isMessagingVisible} onClose={closeMessaging}>
-            <Messaging />
-          </Modal>
-          <Modal show={isSettingsVisible} onClose={closeSettings}>
-            <Settings />
-          </Modal>
-        </AppContainer>
-      </>
+      <AppContainer>
+        <TopBar>
+          <SearchBar />
+        </TopBar>
+        <ButtonsContainer>
+          <Button onClick={openProfile}>Profile</Button>
+          <Button onClick={openAddEventForm}>Add Event</Button>
+          <Button onClick={openMyEvents}>My Events</Button>
+          <Button onClick={openFilters}>Event Filters</Button>
+          <Button onClick={openMessaging}>Messaging</Button>
+          <Button onClick={openSettings}>Settings</Button>
+        </ButtonsContainer>
+        <Content>
+          <MapApp events={events} />
+          {isAddingEvent && <AddEvent onClose={closeAddEventForm} />}
+          {selectedEventId && <EventDetail eventId={selectedEventId} onClose={closeEventDetail} />}
+        </Content>
+        <Modal show={isProfileVisible} onClose={closeProfile}>
+          <Profile />
+        </Modal>
+        <Modal show={isAddingEvent} onClose={closeAddEventForm}>
+          <AddEvent onClose={closeAddEventForm} />
+        </Modal>
+        <Modal show={areFiltersVisible} onClose={closeFilters}>
+          <Filters />
+        </Modal>
+        <Modal show={isMyEventsVisible} onClose={closeMyEvents}>
+          <MyEvents />
+        </Modal>
+        <Modal show={isMessagingVisible} onClose={closeMessaging}>
+          <Messaging />
+        </Modal>
+        <Modal show={isSettingsVisible} onClose={closeSettings}>
+          <Settings />
+        </Modal>
+      </AppContainer>
   );
 };
 
