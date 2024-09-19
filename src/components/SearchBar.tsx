@@ -1,62 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SearchBarContainer = styled.div`
-  width: 100%; /* Full width */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
+const SearchForm = styled.form`
   display: flex;
   align-items: center;
-  justify-content: center; /* Center horizontally */
-
 `;
 
-const Input = styled.input`
-  width: 90%;
+const SearchInput = styled.input`
   padding: 10px;
-  border: 1px solid black;
+  margin-right: 10px;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  flex: 1;
 `;
 
-const Button = styled.button`
-  padding: 10px;
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
   border: none;
   border-radius: 5px;
-  background-color: #007BFF;
-  color: white;
   cursor: pointer;
 `;
 
 interface SearchBarProps {
-    searchQuery: string;
-    setSearchQuery: (query: string) => void;
-    handleSearchSubmit: (e: React.FormEvent) => void;
-    onSearch: (query: string) => Promise<void>;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  onSearch: () => Promise<void>; // Add this line
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery, handleSearchSubmit, onSearch }) => {
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    };
+const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery, onSearch }) => {
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(); // Replace handleSearchSubmit with onSearch
+  };
 
-    const handleFormSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSearch(searchQuery); // Appelle onSearch avec la requête de recherche
-    };
-
-    return (
-        <form onSubmit={handleFormSubmit}>
-            <input 
-                type="text" 
-                value={searchQuery} 
-                onChange={handleInputChange} 
-                placeholder="Search..."
-            />
-            <button type="submit">Search</button>
-        </form>
-    );
+  return (
+    <SearchForm onSubmit={onSubmit}>
+      <SearchInput
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search..."
+      />
+      <SearchButton type="submit">Search</SearchButton>
+    </SearchForm>
+  );
 };
 
 export default SearchBar;

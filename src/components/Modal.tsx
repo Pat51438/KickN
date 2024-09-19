@@ -20,6 +20,17 @@ const ModalContent = styled.div`
   border-radius: 5px;
   max-width: 500px;
   width: 100%;
+  position: relative; /* Ajouté pour positionner le bouton "X" */
+`;
+
+const CloseButton = styled.button`
+  position: absolute; /* Ajouté pour positionner le bouton "X" */
+  top: 10px; /* Ajustez selon vos besoins */
+  right: 10px; /* Ajustez selon vos besoins */
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
 `;
 
 interface ModalProps {
@@ -33,12 +44,12 @@ const Modal: React.FC<ModalProps> = ({ show, onClose, children }) => {
 
     return (
         <ModalBackground onClick={onClose}>
-        <ModalContent onClick={(e) => e.stopPropagation()}>
-    {children}
-    <button onClick={onClose}>Close</button>
-        </ModalContent>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+                <CloseButton onClick={onClose}>×</CloseButton>
+                {children}
+            </ModalContent>
         </ModalBackground>
-);
+    );
 };
 
 export default Modal;

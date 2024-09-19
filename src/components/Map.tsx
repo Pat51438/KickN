@@ -7,6 +7,21 @@ import { DataStore } from '@aws-amplify/datastore';
 import { Event, Location } from '../models';
 import { SearchResult } from '../types/interfaces/SearchResult'; // Add this import
 
+import styled from 'styled-components';
+
+const SmallPin = styled.button`
+    width: 45px;
+    background: transparent;
+    border: none;
+    padding: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+`;
+
+
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '';
 
 interface MapAppProps {
@@ -46,7 +61,6 @@ const MapApp: React.FC<MapAppProps> = ({ events, selectedEvent, setSelectedEvent
 
     return (
         <Map
-     
             initialViewState={viewport}
             style={{ width: '100vw', height: '100vh' }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -62,15 +76,14 @@ const MapApp: React.FC<MapAppProps> = ({ events, selectedEvent, setSelectedEvent
                         longitude={parseFloat(String(location.longitude))}
                         latitude={parseFloat(String(location.latitude))}
                     >
-                        <button
-                            className="marker-btn"
+                        <SmallPin
                             onClick={e => {
                                 e.preventDefault();
                                 setSelectedEvent(event);
                             }}
                         >
                             <img src="/pin.png" alt="Event Marker" />
-                        </button>
+                        </SmallPin>
                     </Marker>
                 );
             })}
@@ -79,15 +92,14 @@ const MapApp: React.FC<MapAppProps> = ({ events, selectedEvent, setSelectedEvent
                     longitude={searchResult.longitude}
                     latitude={searchResult.latitude}
                 >
-                    <button
-                        className="marker-btn search-result"
+                    <SmallPin
                         onClick={(e) => {
                             e.preventDefault();
                             // Vous pouvez ajouter une action ici si nécessaire
                         }}
                     >
-                        <img src="/search-pin.png" alt="Search Result" />
-                    </button>
+                        <img src="/pin.png" alt="Search Result" />
+                    </SmallPin>
                 </Marker>
             )}
             {selectedEvent && eventLocations[selectedEvent.id] && (
@@ -105,6 +117,6 @@ const MapApp: React.FC<MapAppProps> = ({ events, selectedEvent, setSelectedEvent
             )}
         </Map>
     );
-};
+}
 
 export default MapApp;

@@ -39,7 +39,7 @@ const sportsCategories = {
     shooting: ['Paintball', 'Laser Tag', 'Airsoft'],
 };
 
-const Filters = () => {
+const Filters = ({ onClose }: { onClose: () => void }) => {
     const [selectedCategory, setSelectedCategory] = useState<keyof typeof sportsCategories | ''>('');
     const [distanceRange, setDistanceRange] = useState<[number, number]>([1, 10]);
     const [timeframeRange, setTimeframeRange] = useState<[number, number]>([1, 24]);
@@ -58,10 +58,7 @@ const Filters = () => {
     };
 
     const handleShowOptions = () => {
-        setFilteredOptions(`You have selected:
-    - Sport Category: ${selectedCategory}
-    - Distance: between ${distanceRange[0]} km and ${distanceRange[1]} kms
-    - Timeframe: between ${timeframeRange[0]} and ${timeframeRange[1]} hours`);
+        onClose();
     };
 
     return (

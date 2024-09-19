@@ -15,14 +15,6 @@ const AddEventContainer = styled.div`
     margin: 0 auto;
 `;
 
-const CloseButton = styled.button`
-    align-self: flex-end;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-`;
-
 const Input = styled.input`
     margin-bottom: 10px;
     padding: 10px;
@@ -175,7 +167,7 @@ const AddEvent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     return (
         <AddEventContainer>
-            <CloseButton onClick={onClose}>×</CloseButton>
+    
             <h2>Add New Event</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>

@@ -192,8 +192,7 @@ const App: React.FC = () => {
           <SearchBar 
             searchQuery={searchQuery} 
             setSearchQuery={setSearchQuery} 
-            handleSearchSubmit={(e) => { e.preventDefault(); handleSearchSubmit(searchQuery); }} // Update this line
-            onSearch={handleSearchSubmit} // Assurez-vous que cette ligne est présente
+            onSearch={() => handleSearchSubmit(searchQuery)} // Update this line
           />
         </TopBar>
         <MapApp 
@@ -220,7 +219,7 @@ const App: React.FC = () => {
               setSelectedEvent={setSelectedEvent} 
               viewport={viewport} 
               setViewport={setViewport}
-              searchResult={searchResult} // Add this line
+              searchResult={searchResult} 
             />
           </div>
           {isAddingEvent && <AddEvent onClose={closeAddEventForm} />}
@@ -233,10 +232,10 @@ const App: React.FC = () => {
           <AddEvent onClose={closeAddEventForm} />
         </Modal>
         <Modal show={areFiltersVisible} onClose={closeFilters}>
-          <Filters />
+          <Filters onClose={closeFilters} /> 
         </Modal>
         <Modal show={isMyEventsVisible} onClose={closeMyEvents}>
-          <MyEvents />
+          <MyEvents onClose={closeMyEvents} /> 
         </Modal>
         <Modal show={isMessagingVisible} onClose={closeMessaging}>
           <Messaging />
